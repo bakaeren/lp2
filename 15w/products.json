@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Wireless Mouse",
+    "price": 899,
+    "image": "https://via.placeholder.com/100?text=Mouse"
+  },
+  {
+    "name": "Mechanical Keyboard",
+    "price": 2499,
+    "image": "https://via.placeholder.com/100?text=Keyboard"
+  },
+  {
+    "name": "Webcam",
+    "price": 1499,
+    "image": "https://via.placeholder.com/100?text=Webcam"
+  }
+]

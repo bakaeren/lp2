@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+</head>
+
+<body>
+    <h2>Product Catalog</h2>
+    <div id="products"></div>
+
+    <script>
+        fetch('/api/products')
+            .then(res => res.json())
+            .then(products => {
+                const mainDiv = document.getElementById("products")
+                products.forEach(product => {
+                    const childDiv = document.createElement("div");
+                    childDiv.innerHTML = `<img src=${product.image} /> <div> ${product.name} </div>`
+                    mainDiv.appendChild(childDiv)
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load products:', err);
+            });
+    </script>
+</body>
+
+</html>

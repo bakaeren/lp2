@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Directory</title>
+</head>
+
+<body>
+  <h2>Employee Directory</h2>
+  <div id="employeeList"></div>
+
+  <script>
+    fetch('/api/employees')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('employeeList');
+        data.forEach(emp => {
+          const card = document.createElement('div');
+          card.style.border = '1px solid #ccc';
+          card.style.padding = '10px';
+          card.style.marginBottom = '10px';
+          card.style.width = '250px';
+
+          card.innerHTML = `
+            <img src="${emp.image}" alt="${emp.name}" width="100"><br>
+            <strong>${emp.name}</strong><br>
+            ${emp.designation}<br>
+            Department: ${emp.department}<br>
+            Salary: ₹${emp.salary}
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading employee data:', err);
+      });
+  </script>
+</body>
+
+</html>
+

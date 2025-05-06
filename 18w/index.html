@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Database</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Music Database</h1>
+        <div id="songCount" class="alert alert-info"></div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>Film</th>
+                    <th>Music Director</th>
+                    <th>Singer</th>
+                    <th>Actor</th>
+                    <th>Actress</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="songList"></tbody>
+        </table>
+
+        <h2>Add New Song</h2>
+        <form id="addSongForm" class="mb-4">
+            <div class="row">
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="songname" placeholder="Song Name" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="film" placeholder="Film" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="music_director" placeholder="Music Director" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="singer" placeholder="Singer" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="actor" placeholder="Actor" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="actress" placeholder="Actress" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Add Song</button>
+        </form>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000'; // Add this line
+
+        // Update fetchSongs function
+        async function fetchSongs() {
+            const response = await fetch(`${API_URL}/songs`);
+            const data = await response.json();
+            
+            document.getElementById('songCount').textContent = `Total Songs: ${data.count}`;
+            const songList = document.getElementById('songList');
+            songList.innerHTML = '';
+            
+            data.songs.forEach(song => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${song.songname}</td>
+                    <td>${song.film}</td>
+                    <td>${song.music_director}</td>
+                    <td>${song.singer}</td>
+                    <td>${song.actor}</td>
+                    <td>${song.actress}</td>
+                    <td>
+                        <button onclick="deleteSong('${song._id}')" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                `;
+                songList.appendChild(row);
+            });
+        }
+
+        // Update deleteSong function
+        async function deleteSong(id) {
+            await fetch(`${API_URL}/songs/${id}`, { method: 'DELETE' });
+            fetchSongs();
+        }
+
+        // Update addSongForm submit handler
+        document.getElementById('addSongForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const song = Object.fromEntries(formData);
+            
+            await fetch(`${API_URL}/songs`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(song)
+            });
+            
+            e.target.reset();
+            fetchSongs();
+        };
+
+        // Update initialization
+        fetch(`${API_URL}/init`).then(() => fetchSongs());
+    </script>
+</body>
+</html>

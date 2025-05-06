@@ -1,0 +1,25 @@
+<div class="todo-container">
+    <h2>Simple To-Do List</h2>
+  
+    <div class="input-area">
+      <input type="text" [(ngModel)]="newTaskDescription" placeholder="Add a new task">
+      <button (click)="addTask()">Add Task</button>
+    </div>
+  
+    <ul class="task-list">
+      <li *ngFor="let task of tasks; let i = index">
+        <ng-container *ngIf="!task.editing">
+          <span>{{ task.description }}</span>
+          <button (click)="editTask(task)">Edit</button>
+          <button (click)="deleteTask(i)">Delete</button>
+        </ng-container>
+  
+        <ng-container *ngIf="task.editing">
+          <input type="text" [(ngModel)]="editedTaskDescription">
+          <button (click)="saveTask(task)">Save</button>
+          <button (click)="cancelEdit(task)">Cancel</button>
+        </ng-container>
+      </li>
+    </ul>
+  </div>
+  

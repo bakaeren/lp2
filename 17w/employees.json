@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Priya Sharma",
+    "designation": "Software Engineer",
+    "department": "IT",
+    "salary": 60000,
+    "image": "https://via.placeholder.com/100?text=Priya"
+  },
+  {
+    "name": "Rahul Verma",
+    "designation": "Product Manager",
+    "department": "Product",
+    "salary": 85000,
+    "image": "https://via.placeholder.com/100?text=Rahul"
+  },
+  {
+    "name": "Anjali Mehta",
+    "designation": "HR Executive",
+    "department": "HR",
+    "salary": 50000,
+    "image": "https://via.placeholder.com/100?text=Anjali"
+  }
+]
