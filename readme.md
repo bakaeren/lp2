@@ -14,51 +14,55 @@ Assign memory size for our VM (1024 MB sufficient for now).
 
 Select the option Use an existing virtual hard disk file and locate the donwloaded VMDK image below and create VM.
 
-Now we have to create a NAT Network so go to File -> Preferences -> Network -> Add a New NAT Network (Click on +)
+🖧 Step 1: Configure Internal Network in VirtualBox
+Shut down both VMs if they are running.
 
-Right click and edit the Network name and CIDR if needed. Example :
+Open Oracle VirtualBox Manager.
 
-Name - My VMbox Network
-CIDR - 172.168.2.0/24 and save the changes.
-Repeat the process of launching the VM for 2 instances.
+For each VM (Kali and Ubuntu):
 
-Now go to the setting, go to the network setting and change the adapter to NAT Network and and select the NAT Network you made ( in our case : My VMbox Network ) and click ok.
+Go to Settings → Network → Adapter 1.
 
-Launch the VM now.
+Enable the adapter and set:
 
-Install the net-tools to know the IP's of the instance.
+Attached to: Internal Network
 
-$ sudo apt install net-tools
-$ sudo apt update
-$ sudo apt install openssh-server
+Name: intnet (or any custom name, just make sure it's the same on both)
 
-To know the IP address
-$ ifconfig
-Now the IP will be in the range of 172.168.2.*
+▶ Step 2: Start Both VMs
+Start the Kali and Ubuntu virtual machines.
 
- * - any number in the range of 1 to 254 (total 256 addresses)
-Now create a file and write something into it.
-$ touch tranfer.txt
-$ nano transfer.txt
--> hey, How are you?
-ctrl + X and save
-Some Commands for Linux Based Distros:
+🔍 Step 3: Identify Network Interface Name
+In each VM, open the terminal and run:
 
-ls - list all the files and directories
-cat - show the content inside a file
-scp - it will help us to copy files from one vm to other
-cd - change directory
-mkdir - make a new directory
-touch - it makes a new file 
-nano - nano is a editor inside linux os
+ip a
+Note the interface name (e.g., enp0s3, eth0) that corresponds to the internal network.
 
-If your file is on the VM with IP 172.168.2.4 and the second VM's IP is 172.168.2.5.
+⚙ Step 4: Assign Temporary Static IP Addresses
+On Ubuntu (assuming interface is enp0s3):
 
-Tranfer the file using SCP
+sudo ip addr add 192.168.56.2/24 dev enp0s3
 
-$ scp tranfer.txt vagrant@172.168.2.5:/home/vagrants
-Put in the password of the 2nd VM and done.
+On Kali Linux (assuming interface is eth0):
 
-Check for the file in the Second VM under the /home/vagrant directory.
+sudo ip addr add 192.168.56.3/24 dev eth0
 
+Use the correct interface name based on ip a output.
+
+✅ Step 5: Verify the IP Address
+Run this command on both VMs to confirm:
+
+ip addr show
+
+You should see the assigned IP (192.168.56.x) under the respective interface.
+
+📡 Step 6: Test Network Connectivity
+From Kali, ping Ubuntu:
+ping 192.168.56.2
+
+From Ubuntu, ping Kali:
+ping 192.168.56.3
+If you get replies, the internal network is set up correctly and both VMs can communicate.
+
+Step 7 : Now you can use your preferred method scp / ssh to transfer the files between the vm
 Done..!!!!
